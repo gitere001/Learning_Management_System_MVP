@@ -92,7 +92,9 @@ const SignupForm = () => {
           isValid = false;
         }
         break;
-      case 2:
+      // case 2:
+      //   break
+      case 3:
         if (!validatePassword(formData.password)) {
           newErrors.password =
             "Password must be at least 8 characters with a number or symbol";
@@ -103,7 +105,7 @@ const SignupForm = () => {
           isValid = false;
         }
         break;
-      case 3:
+      case 4:
         if (!formData.firstName.trim()) {
           newErrors.firstName = "First name is required";
           isValid = false;
@@ -180,7 +182,7 @@ const SignupForm = () => {
             errors={errors}
             handleNext={handleNext}
             validateEmail={validateEmail}
-            
+
           />
         );
 
@@ -237,6 +239,7 @@ const SignupForm = () => {
         return null;
     }
   };
+  console.log("currentStep", currentStep);
 
   return (
     <div  ref={signupRef} className="min-h-screen bg-[#F5F7FA] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

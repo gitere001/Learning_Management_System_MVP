@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import logoImg from '../assets/logo.png'
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -46,29 +47,29 @@ function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/about"} className="text-[#333333] hover:text-[#0069AA]">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/featured-courses"} className="text-[#333333] hover:text-[#0069AA]">
                   Our Courses
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/contact-us"} className="text-[#333333] hover:text-[#0069AA]">
                   Become an Instructor
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/contact-us"} className="text-[#333333] hover:text-[#0069AA]">
                   Career Support
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/success-stories"} className="text-[#333333] hover:text-[#0069AA]">
                   Success Stories
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -79,29 +80,29 @@ function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/contact-us"} className="text-[#333333] hover:text-[#0069AA]">
                   Help Center
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={'/frequent-questions'} className="text-[#333333] hover:text-[#0069AA]">
                   FAQs
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/contact-us"} className="text-[#333333] hover:text-[#0069AA]">
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={"/pricacy-policies"} className="text-[#333333] hover:text-[#0069AA]">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-[#333333] hover:text-[#0069AA]">
+                <Link to={'terms-of-service'} className="text-[#333333] hover:text-[#0069AA]">
                   Terms of Service
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

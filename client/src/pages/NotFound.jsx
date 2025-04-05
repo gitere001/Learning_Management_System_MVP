@@ -1,12 +1,19 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import {  useLocation, useNavigate } from 'react-router-dom';
 import { Home, BookX } from 'lucide-react';
 
 function NotFound() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
+
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] relative overflow-hidden">
+    <div  className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] relative overflow-hidden">
       <div className="text-center p-8 max-w-2xl z-10 animate-fadeIn">
         <div className="text-[#4f46e5] mb-6 animate-bounce">
           <BookX size={64} />

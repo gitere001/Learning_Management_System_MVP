@@ -1,10 +1,11 @@
 import React from "react";
 import heroImage from "../assets/hero-image.png";
-
+import { useNavigate } from "react-router-dom";
 
 function Hero() {
+  const navigate = useNavigate();
   return (
-    <section  className="bg-[#182042] py-16 px-6 md:px-12 lg:px-16 flex flex-col lg:flex-row items-center mt-[8vh]">
+    <section className="bg-[#182042] py-16 px-6 md:px-12 lg:px-16 flex flex-col lg:flex-row items-center mt-[8vh]">
       {/* Left Content */}
       <div className="lg:w-1/2 text-white mb-10 lg:mb-0">
         <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
@@ -15,16 +16,14 @@ function Hero() {
           on our platform.
         </p>
         <div className="flex flex-wrap gap-4">
-          <button className="px-8 py-3 bg-[#F0B93B] text-[#182042] font-bold rounded-md hover:bg-[#e6ad2e] transition-colors">
+          <button
+            onClick={() => navigate("/signup")}
+            className="px-8 py-3 bg-[#F0B93B] text-[#182042] font-bold rounded-md hover:bg-[#e6ad2e] transition-colors"
+          >
             Get Started
           </button>
           <button
-            onClick={() => {
-              const aboutSection = document.getElementById("about");
-              if (aboutSection) {
-                aboutSection.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
+            onClick={() => navigate("/about")}
             className="px-8 py-3 bg-transparent border border-white text-white font-medium rounded-md hover:bg-white/10 transition-colors"
           >
             Learn More
