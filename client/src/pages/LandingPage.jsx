@@ -24,17 +24,18 @@ function LandingPage() {
     } else if (section === "contact-us" && contactRef.current) {
       contactRef.current.scrollIntoView({ behavior: "smooth" });
     } else if (section === "" && heroRef.current) {
-      heroRef.current.scrollIntoView({ behavior: "smooth" });
+		window.scrollTo({ top: 0, behavior: "smooth" });
+    //   heroRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [location]);
 
   return (
-    <>
-      <Hero ref={heroRef} />
+    <section ref={heroRef}>
+      <Hero />
       <About ref={aboutRef} />
       <FeaturedCourse ref={featuredRef} />
       <ContactForm ref={contactRef} />
-    </>
+    </section>
   );
 }
 
