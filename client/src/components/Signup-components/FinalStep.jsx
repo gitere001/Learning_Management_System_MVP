@@ -1,7 +1,17 @@
 import { Check } from 'lucide-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
-function FinalStep({formData, handleSubmit}) {
+function FinalStep({formData}) {
+	const navigate = useNavigate()
+	function handleRegistration() {
+		console.log(formData);
+		setTimeout(() => {
+			navigate("/")
+
+
+		}, 2000);
+	}
   return (
 	<div className="text-center space-y-6">
 	<div className="w-16 h-16 bg-[#0069AA] rounded-full flex items-center justify-center mx-auto">
@@ -15,7 +25,7 @@ function FinalStep({formData, handleSubmit}) {
 		Your account is ready. Start exploring courses!
 	  </p>
 	</div>
-	<button onClick={handleSubmit} className="btn-primary">
+	<button onClick={handleRegistration} className="btn-primary">
 	  Go to Login
 	</button>
   </div>
