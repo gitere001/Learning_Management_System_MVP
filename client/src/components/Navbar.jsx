@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import logoImg from '../assets/logo.png'
 import { Menu, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 
@@ -28,10 +29,10 @@ function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a onClick={()=> handleHomeClick()}  className="text-[#333333] hover:text-[#0069AA] transition-colors">Home</a>
-            <a href="#about" className="text-[#333333] hover:text-[#0069AA] transition-colors">About</a>
-            <a href="#featured-courses" className="text-[#333333] hover:text-[#0069AA] transition-colors">Featured-Courses</a>
-            <a href="#contactUs" className="text-[#333333] hover:text-[#0069AA] transition-colors">Contact-Us</a>
+            <button onClick={()=> handleHomeClick()}  className="text-[#333333] hover:text-[#0069AA] transition-colors">Home</button>
+            <Link to="/about" className="text-[#333333] hover:text-[#0069AA] transition-colors">About</Link>
+            <Link to="/featured-courses" className="text-[#333333] hover:text-[#0069AA] transition-colors">Featured-Courses</Link>
+            <Link to="/contact-us" className="text-[#333333] hover:text-[#0069AA] transition-colors">Contact-Us</Link>
             <button onClick={()=> {navigate('/login')}} className="btn-outline">Login</button>
             <button onClick={()=> navigate('/signup')} className="btn-primary">Sign Up</button>
           </div>
@@ -53,10 +54,10 @@ function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <a  onClick={() => {handleHomeClick(); hideMobileMenu()}} className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">Home</a>
-            <a href='#about' className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">About</a>
-            <a href="#featured-courses" onClick={hideMobileMenu} className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">Featured Courses</a>
-            <a href="#contactUs" onClick={hideMobileMenu} className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">Contact-Us</a>
+            <button  onClick={() => {handleHomeClick(); hideMobileMenu()}} className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">Home</button>
+            <Link to={"/about"} onClick={hideMobileMenu} className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">About</Link>
+            <Link to="/featured-courses" onClick={hideMobileMenu} className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">Featured Courses</Link>
+            <Link to="/contact-us" onClick={hideMobileMenu} className="block px-3 py-2 text-[#333333] hover:text-[#0069AA] transition-colors">Contact-Us</Link>
             <div className="px-3 py-2 space-y-2">
               <button onClick={()=> {hideMobileMenu(); navigate('/login')}} className="w-full btn-outline">Login</button>
               <button onClick={()=> {hideMobileMenu(); navigate('/signup')}} className="w-full btn-primary">Sign Up</button>

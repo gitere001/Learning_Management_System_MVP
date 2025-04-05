@@ -2,9 +2,9 @@ import React from "react";
 import heroImage from "../assets/hero-image.png";
 
 
-function Hero() {
+function Hero({ref}) {
   return (
-    <section className="bg-[#182042] py-16 px-6 md:px-12 lg:px-16 flex flex-col lg:flex-row items-center mt-[8vh]">
+    <section ref={ref} className="bg-[#182042] py-16 px-6 md:px-12 lg:px-16 flex flex-col lg:flex-row items-center mt-[8vh]">
       {/* Left Content */}
       <div className="lg:w-1/2 text-white mb-10 lg:mb-0">
         <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">

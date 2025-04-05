@@ -1,7 +1,7 @@
 import { Mail, MapPin, Phone, Send } from 'lucide-react'
 import React, { useState } from 'react'
 
-function ContactForm() {
+function ContactForm({ref}) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,7 +24,7 @@ function ContactForm() {
   };
 
   return (
-    <section id='contactUs' className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+    <section ref={ref} className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-[#0069AA] mb-4">Get in Touch</h2>

@@ -1,10 +1,10 @@
 import { Globe2, GraduationCap, Users } from 'lucide-react'
 import React from 'react'
 
-function About() {
+function About({ref}) {
   return (
 
-	 <section id='about' className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+	 <section ref={ref}  className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
 	 <div className="max-w-7xl mx-auto">
 	   <div className="text-center mb-12">
 		 <h2 className="text-3xl font-bold text-[#0069AA] mb-4">Why Choose Digital 4 Africa?</h2>
