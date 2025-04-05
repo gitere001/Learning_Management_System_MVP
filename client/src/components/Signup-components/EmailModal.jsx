@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function EmailModal({formData, handleInputChange, errors, handleNext, validateEmail}) {
 
   return (
-	<div className="space-y-6">
+	<section  className="space-y-6">
 	<div className="text-center">
 	  <h2 className="text-2xl font-bold text-[#0069AA]">Create Your Account for Digital 4 Africa LMS</h2>
 	  <p className="text-[#666666] mt-2">We'll use your email for account access and course certificates. We never spam.</p>
@@ -37,7 +37,7 @@ function EmailModal({formData, handleInputChange, errors, handleNext, validateEm
           Already registered? <Link to={"/login"} className="text-[#0069AA] hover:underline">Login here</Link>
         </p>
       </div>
-  </div>
+  </section>
   )
 }
 

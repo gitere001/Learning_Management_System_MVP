@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import EmailModal from "../components/Signup-components/EmailModal";
 import PasswordModal from "../components/Signup-components/PasswordModal";
@@ -6,8 +6,11 @@ import PersonalDetails from "../components/Signup-components/PersonalDetails";
 import Preferences from "../components/Signup-components/Preferences";
 import FinalStep from "../components/Signup-components/FinalStep";
 import OTPModal from "../components/Signup-components/OtpModal";
+import { useLocation } from "react-router-dom";
 
 const SignupForm = () => {
+  const location = useLocation();
+  const signupRef = useRef(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -23,6 +26,13 @@ const SignupForm = () => {
     referralSource: "",
     otherInterest: "",
   });
+  useEffect(()=>{
+    const section = location.pathname.split("/")[1];
+    if (section === "signup" && signupRef.current) {
+      signupRef.current.scrollIntoView({ behavior: "smooth" });
+
+    }
+  }, [location])
 
   const [errors, setErrors] = useState({
     email: "",
@@ -170,6 +180,7 @@ const SignupForm = () => {
             errors={errors}
             handleNext={handleNext}
             validateEmail={validateEmail}
+            
           />
         );
 
@@ -191,6 +202,7 @@ const SignupForm = () => {
             handleBack={handleBack}
             handleNext={handleNext}
             validatePassword={validatePassword}
+
           />
         );
 
@@ -227,7 +239,7 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div  ref={signupRef} className="min-h-screen bg-[#F5F7FA] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
         <div className="mb-8">
           <div className="flex justify-center space-x-2">
