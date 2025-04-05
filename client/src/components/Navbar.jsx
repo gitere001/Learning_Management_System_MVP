@@ -24,7 +24,7 @@ function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <img className='w-60' src={logoImg} alt="logo" />
+            <img className='w-40' src={logoImg} alt="logo" />
           </div>
 
           {/* Desktop Navigation */}

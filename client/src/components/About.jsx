@@ -7,7 +7,7 @@ function About({ref}) {
 	 <section ref={ref}  className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
 	 <div className="max-w-7xl mx-auto">
 	   <div className="text-center mb-12">
-		 <h2 className="text-3xl font-bold text-[#0069AA] mb-4">Why Choose Digital 4 Africa?</h2>
+		 <h2 className="text-3xl font-bold text-[#E32726] mb-4">Why Choose Digital 4 Africa?</h2>
 		 <p className="text-lg text-[#333333] max-w-3xl mx-auto">
 		   We're committed to empowering Africa's digital future through accessible, quality education that bridges the skills gap and creates opportunities.
 		 </p>

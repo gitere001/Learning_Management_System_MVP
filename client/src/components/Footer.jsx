@@ -19,7 +19,7 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
             <div className="flex items-center">
-              <img className="w-60" src={logoImg} alt="logo" />
+              <img className="w-30" src={logoImg} alt="logo" />
             </div>
             <p className="text-[#333333] mb-4">
               Empowering Africa's digital transformation through quality
