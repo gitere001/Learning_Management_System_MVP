@@ -13,3 +13,38 @@
     box-sizing: border-box;
   }
 }
+html {
+  scroll-behavior: smooth;
+}
+
+
+
+@layer base {
+  :root {
+    --primary-blue: #0069AA;
+    --accent-red: #E32726;
+    --text-dark: #333333;
+    --bg-light: #F5F7FA;
+  }
+
+  body {
+    background: #F5F7FA;
+    color: #333333
+
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#0069AA] text-white px-6 py-2 rounded-lg hover:bg-[#005589] transition-colors;
+  }
+
+  .btn-outline {
+    @apply border-2 border-[#0069AA] text-[#0069AA] px-6 py-2 rounded-lg hover:bg-[#0069AA] hover:text-white transition-colors;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#0069AA] focus:ring-1 focus:ring-[#0069AA] outline-none;
+  }
+}
+
