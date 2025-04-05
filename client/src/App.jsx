@@ -5,7 +5,7 @@ function App() {
 
   return (
     <>
-    <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae ipsam reiciendis laborum?</h1>
+    <h1 className="border-8 bg-amber-800">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae ipsam reiciendis laborum?</h1>
 
     </>
   )
