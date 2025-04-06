@@ -7,6 +7,7 @@ const NotFound = lazy(() => import('./pages/NotFound'))
 const Signup = lazy(() => import('./pages/SignupPage'))
 const Login = lazy(() => import('./pages/LoginPage'))
 const Home = lazy(() => import('./pages/Home'))
+const HomeAdmin = lazy(() => import("./pages/HomeAdmin"))
 
 
 export const appRoutes = [
@@ -17,6 +18,7 @@ export const appRoutes = [
 	{ path: "/featured-courses", element: LandingPage },
 	{ path: "/contact-us", element: LandingPage },
 	{ path: "/home", element: Home },
+	{ path: "/admin-dashboard", element:HomeAdmin },
 	{ path: "*", element: NotFound },
 
 

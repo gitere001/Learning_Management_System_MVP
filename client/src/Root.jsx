@@ -1,25 +1,21 @@
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import Navbar from "./components/Navbar";
 import store from "./app/store";
 import Footer from "./components/Footer";
 
-
-
-// Create a wrapper component inside Provider
 const RootComponent = () => {
+  const { isAuthenticated, role } = useSelector((state) => state.authenication);
 
-
-
+  // Check if the user is authenticated and is an admin
+  const isAdmin = isAuthenticated && role === 'admin';
 
   return (
     <>
-      {/* <div className={`overlay ${openMobileMenu ? "show-overlay" : ""}`}></div> */}
-
-       <Navbar />
+      {!isAdmin && <Navbar />}
       <App />
-	  <Footer/>
+     {!isAdmin && <Footer />}
     </>
   );
 };

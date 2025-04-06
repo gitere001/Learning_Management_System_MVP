@@ -1,10 +1,22 @@
 import React, { useEffect } from 'react';
 import {  useLocation, useNavigate } from 'react-router-dom';
 import { Home, BookX } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 function NotFound() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, role } = useSelector((state) => state.authenication);
+
+  function returnHome() {
+    if (isAuthenticated && role === "student") {
+      navigate("/home")
+    } else if (isAuthenticated && role === "admin") {
+      navigate("/admin-dashboard")
+    } else {
+      navigate("/")
+    }
+  }
 
 
   useEffect(() => {
@@ -27,7 +39,7 @@ function NotFound() {
         </p>
         <button
           className="inline-flex items-center gap-2 px-6 py-3 bg-[#4f46e5] text-white rounded-xl text-lg font-semibold cursor-pointer transition-all ease-in-out duration-300 hover:bg-[#4338ca] transform hover:translate-y-[-2px] shadow-md hover:shadow-lg"
-          onClick={() => navigate('/')}
+          onClick={returnHome}
         >
           <Home size={20} />
           Return Home

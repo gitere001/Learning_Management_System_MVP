@@ -4,11 +4,12 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 // Define initial state
 const initialState = {
-  user: null,
-  role: null,
+
+
   loading: false,
   error: null,
-  isAuthenticated: false,
+  message:null
+
 };
 
 // Async thunk to handle login
@@ -16,7 +17,8 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password, role }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiUrl}/v1/auth/login`, { email, password, role });
+      const response = await axios.post(`${apiUrl}/v1/auth/login`, { email, password, role }, { withCredentials: true });
+      console.log(response.data);
       // Store the role and user data
       return response.data;
     } catch (error) {
@@ -25,32 +27,18 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Async thunk to handle refresh token
-export const refreshToken = createAsyncThunk(
-  'auth/refreshToken',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('/api/refresh', {}, { withCredentials: true });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+
+
 
 // Slice to handle authentication state
-const authSlice = createSlice({
-  name: 'auth',
+const loginSlice = createSlice({
+  name: 'login',
   initialState,
   reducers: {
-    logoutUser: (state) => {
-      state.user = null;
-      state.role = null;
-      state.isAuthenticated = false;
-      state.error = null;
-    },
+
     resetLoginState: (state) => {
       state.error=null
+      state.message=null
     }
   },
   extraReducers: (builder) => {
@@ -62,36 +50,23 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-        state.role = action.payload.role;
+        state.message=action.payload.message
+
+
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
-        state.isAuthenticated = false;
+        state.message=null
       })
 
-      // Handling refresh token
-      .addCase(refreshToken.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(refreshToken.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isAuthenticated = true;
-        state.role = action.payload.role;
-      })
-      .addCase(refreshToken.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
-        state.isAuthenticated = false;
-      });
+
   },
 });
 
 // Export actions
-export const { logoutUser, resetLoginState } = authSlice.actions;
+export const { resetLoginState } = loginSlice.actions;
 
 // Export reducer
-export default authSlice.reducer;
+export default loginSlice.reducer;
 

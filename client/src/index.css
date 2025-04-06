@@ -25,6 +25,7 @@ html {
     --accent-red: #E32726;
     --text-dark: #333333;
     --bg-light: #F5F7FA;
+    
   }
 
   body {
@@ -46,5 +47,19 @@ html {
   .input-field {
     @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#0069AA] focus:ring-1 focus:ring-[#0069AA] outline-none;
   }
+  .lms-button-primary {
+    @apply bg-[#0069AA] cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-[#0069AA]/90 transition-colors;
+  }
+  .lms-button-accent {
+    @apply bg-[#E32726] cursor-pointer  text-white px-4 py-2 rounded-lg hover:bg-[#E32726]/90 transition-colors;
+  }
+  .stat-card {
+    @apply bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300;
+  }
+
+  .stat-icon {
+    @apply w-12 h-12 rounded-full flex items-center justify-center mb-4;
+  }
+
 }
 

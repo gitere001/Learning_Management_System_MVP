@@ -3,44 +3,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser, resetLoginState } from "../../features/auth/loginSlice";
 import Feedback from "../Feedback";
+import { setIsAuthenicated, setRole } from "../../features/auth/authorizationSlice";
 
 const LoginForm = ({ role, onBack }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error,  isAuthenticated } = useSelector(
-    (state) => state.userLogin
-  );
+  const { loading, error, message } = useSelector((state) => state.userLogin);
 
-  // Use useRef to keep track of timers
   const successTimerRef = useRef(null);
   const errorTimerRef = useRef(null);
 
   useEffect(() => {
-    // Clear any existing timers first
     if (successTimerRef.current) clearTimeout(successTimerRef.current);
     if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
 
-    // Handle successful login
-    if (isAuthenticated && !error) {
+    if (message==="Login successful!" && !error) {
       successTimerRef.current = setTimeout(() => {
         dispatch(resetLoginState());
-        navigate('/home');
+        dispatch(setIsAuthenicated());
+        dispatch(setRole(role))
+        role === "student" ? navigate("/home") : navigate("/admin-dashboard");
       }, 2000);
     }
 
-    // Handle error display
     if (error) {
       errorTimerRef.current = setTimeout(() => {
-        dispatch(resetLoginState()); // Reset the error state after 2 seconds
+        dispatch(resetLoginState());
       }, 2000);
     }
 
-    // Clean up function to clear timeouts when component unmounts
     return () => {
       if (successTimerRef.current) clearTimeout(successTimerRef.current);
       if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
     };
-  }, [dispatch, isAuthenticated, error, navigate]);
+  }, [dispatch, message, error, navigate, role]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -95,11 +91,12 @@ const LoginForm = ({ role, onBack }) => {
     }
   };
 
+
   return (
     <div className="space-y-6 w-full relative">
       {error ? (
         <Feedback isSuccess={false} message={error} />
-      ) : isAuthenticated ? (
+      ) : message ? (
         <Feedback isSuccess={true} message={"Successful Login"} />
       ) : null}
 

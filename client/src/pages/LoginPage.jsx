@@ -14,7 +14,7 @@ const MultiStepLogin = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location]);
-console.log(selectedRole);
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 ">
       <div className="bg-white rounded-2xl shadow-xl mt-4 p-8 w-full max-w-md">
