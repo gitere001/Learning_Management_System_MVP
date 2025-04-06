@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 // Define initial state
 const initialState = {
@@ -15,7 +16,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ email, password, role }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/login', { email, password, role });
+      const response = await axios.post(`${apiUrl}/v1/auth/login`, { email, password, role });
       // Store the role and user data
       return response.data;
     } catch (error) {
@@ -48,6 +49,9 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.error = null;
     },
+    resetLoginState: (state) => {
+      state.error=null
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -86,7 +90,7 @@ const authSlice = createSlice({
 });
 
 // Export actions
-export const { logoutUser } = authSlice.actions;
+export const { logoutUser, resetLoginState } = authSlice.actions;
 
 // Export reducer
 export default authSlice.reducer;

@@ -4,7 +4,7 @@ import { CheckCircle, XCircle } from 'lucide-react';
 const Feedback = ({ isSuccess, message }) => {
   return (
     <div
-      className={`flex items-center gap-2 p-4 rounded-lg border absolute top-5 left-1/2 transform -translate-x-1/2 ${
+      className={`flex items-center gap-2 p-4 rounded-lg border w-max absolute top-5 left-1/2 transform -translate-x-1/2 ${
         isSuccess
           ? 'bg-green-50 border-green-200 text-green-800'
           : 'bg-red-50 border-red-200 text-red-800'
