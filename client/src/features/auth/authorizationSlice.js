@@ -6,7 +6,8 @@ const initialState = {
   isAuthenticated: false,
   loading: false,
   error: null,
-  role:null
+  role:null,
+  user:null
 };
 
 export const refreshToken = createAsyncThunk(
@@ -40,6 +41,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = true;
         state.role=action.payload.role
+        state.user=action.payload.user
 
       })
       .addCase(refreshToken.rejected, (state, action) => {

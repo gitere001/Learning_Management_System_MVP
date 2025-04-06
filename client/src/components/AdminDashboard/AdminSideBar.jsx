@@ -38,6 +38,12 @@ const Sidebar = ({ className }) => {
       icon: CreditCard,
       to: "/admin-dashboard/payments",
     },
+    {
+      id: "admin-account",
+      label: "Admin Account",
+      icon: Users,
+      to: "/admin-dashboard/account",
+    },
   ];
 
   const logOutUser = () => {
@@ -71,7 +77,7 @@ const Sidebar = ({ className }) => {
             <li key={item.id}>
               <Link
                 to={item.to} // Use 'to' prop from Link
-                className={`flex items-center py-3 px-4 transition-colors ${activeLink === item.id ? "text-lms-primary bg-blue-50 border-r-4 border-lms-primary" : "text-lms-text hover:text-lms-primary hover:bg-blue-50"} ${isCollapsed ? "justify-center" : ""}`}
+                className={`flex items-center py-3 px-4 transition-colors ${activeLink === item.id ? "text-[#0069AA] bg-blue-50 border-r-4 border-lms-primary" : "text-lms-text hover:text-lms-primary hover:bg-blue-50"} ${isCollapsed ? "justify-center" : ""}`}
                 onClick={() => setActiveLink(item.id)}
               >
                 <item.icon size={20} />
@@ -83,13 +89,13 @@ const Sidebar = ({ className }) => {
       </nav>
 
       <div onClick={logOutUser} className="absolute bottom-0 w-full border-t p-4 ">
-        <a
-         
-          className={`flex items-center text-lms-text hover:text-lms-accent transition-colors ${isCollapsed ? "justify-center" : ""}`}
+        <button
+
+          className={`flex items-center cursor-pointer text-lms-text hover:text-[#E32726] transition-colors ${isCollapsed ? "justify-center" : ""}`}
         >
           <LogOut size={20} />
           {!isCollapsed && <span className="ml-3">Logout</span>}
-        </a>
+        </button>
       </div>
     </div>
   );

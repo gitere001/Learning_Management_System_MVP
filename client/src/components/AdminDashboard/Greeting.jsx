@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const Greeting = () => {
   const [greeting, setGreeting] = useState('');
+  const {  user } = useSelector((state) => state.authenication);
+  console.log(user);
 
   useEffect(() => {
     const getCurrentGreeting = () => {
@@ -20,7 +23,7 @@ const Greeting = () => {
 
   return (
     <div className="mb-6">
-      <h1 className="text-2xl font-bold">{greeting}, Admin</h1>
+      <h1 className="text-2xl font-bold">{greeting}, {user.firstName}</h1>
       <p className="text-gray-600">Here's what's happening with your platform today</p>
     </div>
   );
