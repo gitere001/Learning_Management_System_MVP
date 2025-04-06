@@ -20,6 +20,7 @@ export const checkEmail = createAsyncThunk(
 
       return message; // "New user"
     } catch (error) {
+      console.log(error);
       // Check if the error is an axios error
       if (error.response) {
         // Server responded with a status other than 2xx
