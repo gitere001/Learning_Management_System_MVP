@@ -1,63 +1,63 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-const apiUrl = import.meta.env.VITE_API_URL
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+const apiUrl = import.meta.env.VITE_API_URL;
 
+// Async thunk to register the user
+export const registerUser = createAsyncThunk(
+  'auth/registerUser',
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${apiUrl}/v1/auth/register`, userData);
 
+      const { success, message } = response.data;
 
-const initialState = {
-	registrationDetails: {},
-	loading: false,
-	registrationError:null,
-	successMessage:null,
-	activeRegistrationModal:null
-};
+      if (!success) {
+        // If registration fails (e.g., email already in use), return the error message
+        return rejectWithValue(message);
+      }
 
-
-export const registerUser = createAsyncThunk("auth/registerUser", async (payload, thunkAPI) => {
-	try {
-		const res = await axios.post(`${apiUrl}/register-user`, payload);
-		return res.data;
-	} catch (error) {
-		return thunkAPI.rejectWithValue(error.response ? error.response.data : error.message);
-	}
-});
+      return message; // "User registered successfully"
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue("Server error. Please try again.");
+    }
+  }
+);
 
 const authSlice = createSlice({
-	name: "auth",
-	initialState,
-	reducers: {
-		resetAuth: (state) => {
-			state.error = null;
-			state.isLoggedIn = false;
-			state.loading = false;
-		},
-		resetFeedback: (state) => {
-			state.error = null;
-			state.success = null;
-		},
-		showAuthPage: (state) => {
-			state.showAuthModal = true;
-		},
-		hideAuthPage: (state) => {
-			state.showAuthModal = false;
-		}
-	},
-	extraReducers: (builder) => {
-		builder
-		
-			.addCase(registerUser.pending, (state) => {
-				state.loading = true;
-				state.error = null;
-			})
-			.addCase(registerUser.fulfilled, (state) => {
-				state.loading = false;
-				state.success = true;
-			})
-			.addCase(registerUser.rejected, (state, action) => {
-				state.loading = false;
-				state.error = action.payload || "Registration failed";
-			});
-	},
+  name: 'auth',
+  initialState: {
+    loading: false,
+    error: null,
+    message: '',
+  },
+  reducers: {
+    clearRegistrationState: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.message = '';
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.message = '';
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload; // "User registered successfully"
+        state.error = null;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // Server or custom error message
+        state.message = '';
+      });
+  },
 });
+
+export const { clearRegistrationState } = authSlice.actions;
 
 export default authSlice.reducer;

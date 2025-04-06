@@ -131,13 +131,7 @@ const SignupForm = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateStep(currentStep)) {
-      // Handle form submission here
-      console.log("Form submitted:", formData);
-    }
-  };
+
 
   const calculatePasswordStrength = (password) => {
     let strength = 0;
@@ -232,7 +226,7 @@ const SignupForm = () => {
 
       case 6:
         return (
-         <FinalStep formData={formData} handleSubmit={handleSubmit}/>
+         <FinalStep formData={formData} setFormData={setFormData}/>
         );
 
       default:
@@ -242,7 +236,7 @@ const SignupForm = () => {
   console.log("currentStep", currentStep);
 
   return (
-    <div  ref={signupRef} className="min-h-screen bg-[#F5F7FA] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div   ref={signupRef} className=" min-h-screen bg-[#F5F7FA] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
         <div className="mb-8">
           <div className="flex justify-center space-x-2">

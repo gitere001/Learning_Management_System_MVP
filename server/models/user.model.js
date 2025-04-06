@@ -4,76 +4,96 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   middleName: {
     type: String,
     default: null,
-    trim: true
+    trim: true,
   },
   lastName: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
     lowercase: true,
-    trim: true
+    trim: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   role: {
     type: String,
-    enum: ['student', 'admin'],
-    default: 'student',
-    required: true
+    enum: ["student", "admin"],
+    default: "student",
+    required: true,
   },
-  interest: {
+  gender: {
+    type: String,
+    enum: ["male", "female", "non-binary", "prefer-not-to-say"],
+    required: false,
+  },
+  interests: {
+    type: [String],
+    enum: [
+      "Graphic Design",
+      "Digital Marketing",
+      "Web Development",
+      "Data Science",
+      "Other",
+    ],
+    default: [],
+  },
+  otherInterest: {
+    type: String,
+    default: "",
+  },
+  referralSource: {
     type: String,
     enum: [
-      'Graphic Design',
-      'Digital Marketing',
-      'Web Design',
-      'Full-Stack Web Development',
-      'Data Science',
-      'Other'
+      "",
+      "social-media",
+      "friend-referral",
+      "google",
+      "email",
+      "other",
     ],
-    default: null
+    default: "",
   },
   department: {
     type: String,
     enum: [
-      'Sales',
-      'Education',
-      'Support',
-      'Management',
-      'IT',
-      'HR',
-      'Marketing'
+      "Sales",
+      "Education",
+      "Support",
+      "Management",
+      "IT",
+      "HR",
+      "Marketing",
     ],
-    default: null
+    default: null,
   },
   passwordResetToken: {
     type: String,
-    default: null
+    default: null,
   },
   passwordResetExpires: {
     type: Date,
-    default: null
-  }
+    default: null,
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-// Add index for faster queries
+// Indexes
 userSchema.index({ email: 1 });
 userSchema.index({ role: 1 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

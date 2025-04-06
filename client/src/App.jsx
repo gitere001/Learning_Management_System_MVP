@@ -1,47 +1,41 @@
-
+import { Suspense } from "react";
 import { appRoutes } from "./appRoutes";
-import {Route, Routes } from "react-router-dom";
-import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);  // Fake logged-in state
-  const [username, setUsername] = useState("JohnDoe");  // Fake username
-  const [email, setEmail] = useState("johndoe@example.com");  // Fake email
-  const [image, setImage] = useState("https://via.placeholder.com/150");  // Fake profile image
+  const isLoggedIn = false;
 
   return (
     <div>
-      <Routes>
-        {appRoutes.map((route) => {
-          if ("requireAuth" in route) {
-            return (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={
-                  isLoggedIn ? (
-                    <route.element
-                      username={username}
-                      email={email}
-                      image={image}
-                    />
-                  ) : (
-                    <Navigate replace to="/login" />
-                  )
-                }
-              />
-            );
-          } else {
-            return (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={<route.element setEmail={setEmail} />}
-              />
-            );
-          }
-        })}
-      </Routes>
+      <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+        <Routes>
+          {appRoutes.map((route) => {
+            if ("requireAuth" in route) {
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={
+                    isLoggedIn ? (
+                      <route.element />
+                    ) : (
+                      <Navigate replace to="/login" />
+                    )
+                  }
+                />
+              );
+            } else {
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={<route.element />}
+                />
+              );
+            }
+          })}
+        </Routes>
+      </Suspense>
     </div>
   );
 }

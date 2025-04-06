@@ -2,16 +2,24 @@ import { Check } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-function FinalStep({formData}) {
+function FinalStep({formData, setFormData}) {
 	const navigate = useNavigate()
-	function handleRegistration() {
-		console.log(formData);
-		setTimeout(() => {
-			navigate("/")
-
-
-		}, 2000);
+	function handleBackNavigation() {
+		setFormData({
+			email: "",
+			password: "",
+			confirmPassword: "",
+			firstName: "",
+			middleName: "",
+			lastName: "",
+			gender: "",
+			interests: [],
+			referralSource: "",
+			otherInterest: "",
+		  })
+		  navigate('/login')
 	}
+
   return (
 	<div className="text-center space-y-6">
 	<div className="w-16 h-16 bg-[#0069AA] rounded-full flex items-center justify-center mx-auto">
@@ -25,7 +33,7 @@ function FinalStep({formData}) {
 		Your account is ready. Start exploring courses!
 	  </p>
 	</div>
-	<button onClick={handleRegistration} className="btn-primary">
+	<button onClick={handleBackNavigation} className="btn-primary">
 	  Go to Login
 	</button>
   </div>
