@@ -161,6 +161,7 @@ const AddCourseModal = () => {
   };
 
   const navigate = useNavigate();
+  
 
   return (
     <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl relative">

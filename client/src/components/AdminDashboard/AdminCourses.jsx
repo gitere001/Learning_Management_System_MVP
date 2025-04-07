@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllCourses } from "../../features/course/fetchAllCourses";
+import buildImageUrl from "../../utils/buildurl";
 
 const AdminCourses = () => {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const AdminCourses = () => {
             >
               <div className="relative h-48">
                 <img
-                  src={course.thumbnail}
+                  src={course.thumbnail.startsWith('http')? course.thumbnail : buildImageUrl(course.thumbnail)}
                   alt={course.title}
                   className="w-full h-full object-cover"
                 />

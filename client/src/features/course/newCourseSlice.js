@@ -11,13 +11,24 @@ export const createCourse = createAsyncThunk(
 
       // Append all course data to formData
       Object.entries(courseData).forEach(([key, value]) => {
-        formData.append(key, value);
+        if (key === 'isFree') {
+          console.log(typeof key);
+          // Ensure isFree is a boolean
+          const isFreeBool = value === 'true' || value === true;
+          
+          console.log(`${key}: ${isFreeBool}`);
+          formData.append(key, isFreeBool);
+        } else {
+          console.log(`${key}: ${value}`);
+          formData.append(key, value);
+        }
       });
 
       // Append thumbnail file if it exists
       if (thumbnailFile) {
         formData.append('thumbnail', thumbnailFile);
       }
+      console.log(formData);
 
       const response = await axios.post(
         `${apiUrl}/v1/courses/add-new-course`,
