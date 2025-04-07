@@ -1,9 +1,16 @@
 export const validateCourseData = (req, res, next) => {
 	const errors = [];
+	if (typeof req.body.isFree === "string") {
+		req.body.isFree = req.body.isFree.toLowerCase() === "true";
+	  }
 
 	const { title, description, price, isFree, thumbnail } = req.body;
 	const imageFile = req.file;
-	
+
+
+	console.log("is Free", isFree);
+	console.log("is free", typeof isFree)
+
 	// Check if title is provided
 	if (!title || title.trim() === '') {
 	  errors.push("Title is required");

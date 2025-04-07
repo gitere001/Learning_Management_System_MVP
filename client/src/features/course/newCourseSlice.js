@@ -12,11 +12,12 @@ export const createCourse = createAsyncThunk(
       // Append all course data to formData
       Object.entries(courseData).forEach(([key, value]) => {
         if (key === 'isFree') {
-          console.log(typeof key);
           // Ensure isFree is a boolean
           const isFreeBool = value === 'true' || value === true;
           
+
           console.log(`${key}: ${isFreeBool}`);
+
           formData.append(key, isFreeBool);
         } else {
           console.log(`${key}: ${value}`);

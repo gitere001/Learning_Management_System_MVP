@@ -6,7 +6,7 @@ import UpdateCourseModal from "./UpdateCourse";
 import AdminCourses from "./AdminCourses";
 
 const Dashboard = () => {
-  console.log(UpdateCourseModal);
+  
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState("default");
   const courseData = {

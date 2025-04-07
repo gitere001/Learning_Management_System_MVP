@@ -1,26 +1,32 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { appRoutes } from "./appRoutes";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { refreshToken } from "./features/auth/authorizationSlice";
 
 function App() {
-  const { isAuthenticated } = useSelector((state) => state.authenication);
-
+  const { isAuthenticated, role } = useSelector((state) => state.authenication);
+  const { isLoggedOut } = useSelector((state) => state.logout);
+  const [initialLoad, setInitialLoad] = useState(true);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(refreshToken());
-  }, [dispatch]);
+    if (isLoggedOut || !isAuthenticated || initialLoad) {
+      dispatch(refreshToken());
+    }
+  }, [dispatch, isLoggedOut, isAuthenticated, initialLoad]);
 
-  // useEffect(() => {
-  //   if (!loading) {
-  //     if (isAuthenticated) {
-  //       navigate(role === 'admin' ? '/home-admin' : '/home');
-  //     }
-  //   }
-  // }, [isAuthenticated, loading, role, navigate]);
+  useEffect(() => {
+    if (initialLoad && isAuthenticated) {
+      if (role === "student") {
+        navigate("/home");
+      } else if (role === "admin") {
+        navigate("/admin-dashboard");
+      }
+      setInitialLoad(false);
+    }
+  }, [isAuthenticated, role, navigate, initialLoad]);
 
   return (
     <div>
@@ -34,7 +40,7 @@ function App() {
           </div>
         }
       >
-       <Routes>
+        <Routes>
           {appRoutes.map((route) => {
             if ("requireAuth" in route) {
               return (
