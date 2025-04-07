@@ -2,28 +2,26 @@ import React, { useEffect, useRef, useState } from "react";
 import { X, Image as ImageIcon, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createCourse,
-  resetCourseState,
-} from "../../features/course/newCourseSlice";
+import { updateCourse, resetUpdateCourseState } from "../../features/course/updateCourseSlice.js";
 import Feedback from "../Feedback";
-import { validateCourseForm, ErrorMessage } from '../../utils/validationUtils.jsx'
+import { validateCourseForm, ErrorMessage } from '../../utils/validationUtils.jsx';
 
-const AddCourseModal = () => {
-  const { loading, success, error } = useSelector((state) => state.newCourse);
+const UpdateCourseModal = ({ courseToEdit }) => {
+  const { loading, success, error } = useSelector((state) => state.updateCourse);
   const dispatch = useDispatch();
   const [formErrors, setFormErrors] = useState({});
   const [touched, setTouched] = useState({});
 
   const [courseData, setCourseData] = useState({
-    title: "",
-    description: "",
-    thumbnail: "",
+    title: courseToEdit.title,
+    description: courseToEdit.description,
+    thumbnail: courseToEdit.thumbnail,
     thumbnailFile: null,
-    price: "0",
-    isFree: false,
+    price: courseToEdit.price.toString(),
+    isFree: courseToEdit.isFree,
   });
-  const [previewUrl, setPreviewUrl] = useState("");
+
+  const [previewUrl, setPreviewUrl] = useState(courseToEdit.thumbnail);
   const successTimerRef = useRef(null);
   const errorTimerRef = useRef(null);
 
@@ -37,7 +35,7 @@ const AddCourseModal = () => {
 
     if (success && !error) {
       successTimerRef.current = setTimeout(() => {
-        dispatch(resetCourseState());
+        dispatch(resetUpdateCourseState());
         setPreviewUrl("");
         setCourseData({
           title: "",
@@ -54,7 +52,7 @@ const AddCourseModal = () => {
 
     if (error) {
       errorTimerRef.current = setTimeout(() => {
-        dispatch(resetCourseState());
+        dispatch(resetUpdateCourseState());
       }, 2000);
     }
 
@@ -93,7 +91,6 @@ const AddCourseModal = () => {
       setCourseData((prev) => ({ ...prev, [name]: value }));
     }
 
-    // Clear error when user starts typing
     if (formErrors[name]) {
       setFormErrors(prev => ({ ...prev, [name]: null }));
     }
@@ -146,7 +143,8 @@ const AddCourseModal = () => {
 
     if (Object.keys(errors).length === 0) {
       dispatch(
-        createCourse({
+        updateCourse({
+          courseId: courseToEdit._id,
           courseData: {
             title: courseData.title,
             description: courseData.description,
@@ -170,7 +168,7 @@ const AddCourseModal = () => {
         <Feedback isSuccess={true} message={success} />
       ) : null}
       <div className="flex justify-between items-center p-6 border-b">
-        <h3 className="text-xl font-semibold text-[#333333]">Add New Course</h3>
+        <h3 className="text-xl font-semibold text-[#333333]">Update Course</h3>
         <button
           onClick={closeModal}
           className="text-gray-500 hover:text-gray-700"
@@ -265,7 +263,6 @@ const AddCourseModal = () => {
               className={`w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0069AA] ${
                 formErrors.title ? "border-red-500" : "border-gray-300"
               }`}
-
             />
             <ErrorMessage error={formErrors.title} />
           </div>
@@ -284,7 +281,6 @@ const AddCourseModal = () => {
               className={`w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0069AA] ${
                 formErrors.description ? "border-red-500" : "border-gray-300"
               }`}
-
             />
             <ErrorMessage error={formErrors.description} />
           </div>
@@ -341,7 +337,7 @@ const AddCourseModal = () => {
             type="submit"
             className="px-4 py-2 bg-[#0069AA] text-white rounded-lg hover:bg-[#0069AA]/90"
           >
-            {loading ? "Submiting..." : "Create Course"}
+            {loading ? "Updating..." : "Update Course"}
           </button>
         </div>
       </form>
@@ -349,4 +345,4 @@ const AddCourseModal = () => {
   );
 };
 
-export default AddCourseModal;
+export default UpdateCourseModal;

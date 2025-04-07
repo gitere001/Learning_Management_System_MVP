@@ -4,6 +4,7 @@ import corsMiddleware from './config/cors.js'
 import connectDB from './config/db.js';
 import authRouter from './routes/auth.routes.js';
 import cookieParser from 'cookie-parser'
+import courseRouter from './routes/course.router.js';
 
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/courses', courseRouter)
 
 
 app.get('/', (req, res) => {

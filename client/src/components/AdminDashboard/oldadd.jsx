@@ -284,7 +284,7 @@ const AddCourseModal = () => {
               className={`w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0069AA] ${
                 formErrors.description ? "border-red-500" : "border-gray-300"
               }`}
-
+              
             />
             <ErrorMessage error={formErrors.description} />
           </div>

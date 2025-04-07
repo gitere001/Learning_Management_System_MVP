@@ -4,6 +4,9 @@ import registrationReducer from "../features/auth/registrationSlice"
 import loginReducer from '../features/auth/loginSlice'
 import authenicationReducer from '../features/auth/authorizationSlice'
 import logoutReducer from '../features/auth/logoutSlice'
+import newCourseReducer from '../features/course/newCourseSlice'
+import updateCourseReducer from '../features/course/updateCourseSlice'
+import allCoursesReducer from '../features/course/fetchAllCourses'
 
 const store = configureStore({
 	reducer: {
@@ -11,7 +14,10 @@ const store = configureStore({
 		userRegistration: registrationReducer,
 		userLogin: loginReducer,
 		authenication: authenicationReducer,
-		logout: logoutReducer
+		logout: logoutReducer,
+		newCourse: newCourseReducer,
+		updateCourse: updateCourseReducer,
+		allCourses: allCoursesReducer
 
 
 
