@@ -5,6 +5,7 @@ import Course from '../models/course.model.js'
 import { v4 as uuidv4 } from 'uuid';
 import { isURL } from "../utils/isUrl.js";
 import { moveFile } from "../utils/fileService.js";
+import EnrolledCourse from '../models/enrolledCourse.model.js';
 
 
 
@@ -102,6 +103,8 @@ export const updateCourseThumbnail = async (req, res) => {
 
 
 export const getCourse = async (req, res) => {
+  const user = req.user
+  console.log(user);
   try {
     const { id } = req.params;
 
@@ -113,12 +116,110 @@ export const getCourse = async (req, res) => {
       return res.status(200).json({ success: true, data: course });
     }
 
-    // No ID provided, return all courses
-    const courses = await Course.find();
-    return res.status(200).json({ success: true, data: courses });
+    if (user.role === "admin") {
+
+      const courses = await Course.find();
+      return res.status(200).json({ success: true, data: courses });
+    } else if (user.role === "student") {
+      const courses = await Course.find({ status: "Ready" });
+      return res.status(200).json({ success: true, data: courses });
+
+    }
 
   } catch (error) {
     console.error('Error fetching course(s):', error);
     return res.status(500).json({ success: false, message: error.message || 'Server error' });
+  }
+};
+export const toggleCourseStatus = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
+      });
+    }
+
+    // Toggle between 'Ready' (published) and 'Draft' (unpublished)
+    const newStatus = course.status === 'Ready' ? 'Draft' : 'Ready';
+    course.status = newStatus;
+
+    await course.save();
+
+    return res.status(200).json({
+      success: true,
+
+    });
+
+  } catch (error) {
+    console.error('Error toggling course status:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Server error'
+    });
+  }
+};
+
+// export const fetchStudentCourse = async (req, res) => {
+
+// }
+
+export const enrollCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const user = req.user;
+
+    // Check if course exists
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
+      });
+    }
+
+    // Check if course is published
+    if (course.status !== 'Ready') {
+      return res.status(400).json({
+        success: false,
+        message: 'Course is not available for enrollment'
+      });
+    }
+
+    // Check if user is already enrolled
+    const existingEnrollment = await EnrolledCourse.findOne({
+      userId: user._id,
+      courseId: course._id
+    });
+
+    if (existingEnrollment) {
+      return res.status(409).json({
+        success: false,
+        message: 'User is already enrolled in this course'
+      });
+    }
+
+    // Create new enrollment
+    const enrollment = await EnrolledCourse.create({
+      userId: user._id,
+      courseId: course._id,
+      status: 'in-progress'
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: 'Successfully enrolled in course',
+      data: enrollment
+    });
+
+  } catch (error) {
+    console.error('Error enrolling in course:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Server error'
+    });
   }
 };

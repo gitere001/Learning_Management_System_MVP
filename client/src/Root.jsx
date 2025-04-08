@@ -7,15 +7,17 @@ import Footer from "./components/Footer";
 
 const RootComponent = () => {
   const { isAuthenticated, role } = useSelector((state) => state.authenication);
+  const { showPaymentModal } = useSelector((state) => state.payment);
+  console.log("showPaymentModal: ", showPaymentModal);
 
   // Check if the user is authenticated and is an admin
-  const isAdmin = isAuthenticated && role === 'admin';
+  const isAdmin = isAuthenticated && role === "admin";
 
   return (
     <>
-      {!isAdmin && <Navbar />}
+      {!isAdmin && !showPaymentModal && <Navbar />}
       <App />
-     {!isAdmin && <Footer />}
+      {!isAdmin && !showPaymentModal && <Footer />}
     </>
   );
 };

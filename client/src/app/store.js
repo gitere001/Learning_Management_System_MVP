@@ -7,6 +7,7 @@ import logoutReducer from '../features/auth/logoutSlice'
 import newCourseReducer from '../features/course/newCourseSlice'
 import updateCourseReducer from '../features/course/updateCourseSlice'
 import allCoursesReducer from '../features/course/fetchAllCourses'
+import paymentReducer from "../features/payment/paymentSlice";
 
 const store = configureStore({
 	reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
 		logout: logoutReducer,
 		newCourse: newCourseReducer,
 		updateCourse: updateCourseReducer,
-		allCourses: allCoursesReducer
+		allCourses: allCoursesReducer,
+		payment: paymentReducer
 
 
 

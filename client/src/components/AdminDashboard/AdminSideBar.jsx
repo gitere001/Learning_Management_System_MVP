@@ -8,6 +8,8 @@ import {
   LogOut,
   Menu,
   X,
+  PlusCircle,
+  Award
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +32,7 @@ const Sidebar = ({ className }) => {
 
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, to: "/admin-dashboard" },
+    {id: "newCourse", label: "Add New Course", icon: PlusCircle, to: "/admin-dashboard/add-new-course"},
     { id: "courses", label: "Courses", icon: BookOpen, to: "/admin-dashboard/courses" },
     { id: "users", label: "Manage Users", icon: Users, to: "/admin-dashboard/users" },
     {
@@ -38,6 +41,8 @@ const Sidebar = ({ className }) => {
       icon: CreditCard,
       to: "/admin-dashboard/payments",
     },
+    {id: "newAdmin", label: "Add New Admin", icon: PlusCircle, to: "/admin-dashboard/add-admin"},
+    {id: "certifications", label: "Certificates", icon: Award, to: "/admin-dashboard/certificates"},
     {
       id: "admin-account",
       label: "Admin Account",

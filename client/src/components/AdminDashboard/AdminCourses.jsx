@@ -12,7 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllCourses } from "../../features/course/fetchAllCourses";
 import buildImageUrl from "../../utils/buildurl";
-// import courses from "../../data/sampleAdminCourses";
+import { toggleStatus } from "../../utils/fetchCourse";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const AdminCourses = () => {
   const { loading, courses, error } = useSelector((state) => state.allCourses);
@@ -21,10 +23,19 @@ const AdminCourses = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState(null);
   const [confirmationText, setConfirmationText] = useState("");
+  const [courseStatuses, setCourseStatuses] = useState({}); // Local state for statuses
 
   useEffect(() => {
     dispatch(fetchAllCourses());
   }, [dispatch]);
+
+  useEffect(() => {
+    const initialStatuses = {};
+    courses.forEach((course) => {
+      initialStatuses[course._id] = course.status;
+    });
+    setCourseStatuses(initialStatuses);
+  }, [courses]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -39,8 +50,16 @@ const AdminCourses = () => {
     return `KES ${price.toLocaleString()}`;
   };
 
-  const handleToggleStatus = (courseId, currentStatus) => {
-    console.log(`Toggling course ${courseId} from ${currentStatus} to ${currentStatus === 'Ready' ? 'Draft' : 'Ready'}`);
+  const handleToggleStatus = async (courseId) => {
+    try {
+      await toggleStatus(apiUrl, courseId);
+      setCourseStatuses((prev) => ({
+        ...prev,
+        [courseId]: prev[courseId] === "Ready" ? "Draft" : "Ready",
+      }));
+    } catch (err) {
+      console.error("Failed to toggle status:", err);
+    }
   };
 
   const handleDeleteClick = (course) => {
@@ -65,7 +84,7 @@ const AdminCourses = () => {
 
   return (
     <div className="space-y-6 relative">
-      {/* Delete Confirmation Modal - Now contained within parent */}
+      {/* Delete Modal */}
       {showDeleteModal && (
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 bg-white rounded-xl shadow-lg p-6 mx-auto max-w-2xl">
           <div className="flex items-start space-x-3">
@@ -116,18 +135,9 @@ const AdminCourses = () => {
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Header & Search */}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-[var(--text-dark)]">
-          All Courses
-        </h2>
-        <button
-          onClick={() => navigate("/admin-dashboard/add-new-course")}
-          className="flex items-center px-4 py-2 bg-[var(--primary-blue)] text-white rounded-lg hover:bg-[var(--primary-blue)]/90 transition-colors"
-        >
-          <PlusCircle className="w-5 h-5 mr-2" />
-          Add New Course
-        </button>
+        <h2 className="text-2xl font-bold text-[var(--text-dark)]">All Courses</h2>
       </div>
 
       <div className="relative">
@@ -139,73 +149,77 @@ const AdminCourses = () => {
         />
       </div>
 
+      {/* Course Cards */}
       {courses.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {courses.map((course) => (
-            <div
-              key={course._id}
-              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-            >
-              <div className="relative h-48">
-                <img
-                  src={course.thumbnail.startsWith('http') ? course.thumbnail : buildImageUrl(course.thumbnail)}
-                  alt={course.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full text-sm font-medium">
-                  {formatPrice(course.price, course.isFree)}
+          {courses.map((course) => {
+            const currentStatus = courseStatuses[course._id] || course.status;
+            return (
+              <div
+                key={course._id}
+                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+              >
+                <div className="relative h-48">
+                  <img
+                    src={course.thumbnail.startsWith("http") ? course.thumbnail : buildImageUrl(course.thumbnail)}
+                    alt={course.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full text-sm font-medium">
+                    {formatPrice(course.price, course.isFree)}
+                  </div>
                 </div>
-              </div>
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-semibold text-[var(--text-dark)] line-clamp-1 flex-1">
-                    {course.title}
-                  </h3>
-                  <span
-                    className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
-                      course.status === 'Ready'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}
-                  >
-                    {course.status || 'Draft'}
-                  </span>
-                </div>
-                <div className="flex items-center text-sm text-gray-500 mb-4">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  {formatDate(course.createdAt)}
-                </div>
-                <div className="flex justify-between items-center">
-                  <button
-                    onClick={() => console.log("View course:", course._id)}
-                    className="flex items-center text-[var(--primary-blue)] hover:underline"
-                  >
-                    <Eye className="w-4 h-4 mr-1" />
-                    View
-                  </button>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleToggleStatus(course._id, course.status || 'Draft')}
-                      className={`px-3 py-1 rounded-md text-sm font-medium ${
-                        course.status === 'Ready'
-                          ? 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                          : 'bg-[var(--primary-blue)] text-white hover:bg-[var(--primary-blue)]/90'
-                      } transition-colors`}
+                <div className="p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-lg font-semibold text-[var(--text-dark)] line-clamp-1 flex-1">
+                      {course.title}
+                    </h3>
+                    <span
+                      className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
+                        currentStatus === "Ready"
+                          ? "bg-green-100 text-green-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      }`}
                     >
-                      {course.status === 'Ready' ? 'Unpublish' : 'Publish'}
-                    </button>
+                      {currentStatus || "Draft"}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500 mb-4">
+                    <Calendar className="w-4 h-4 mr-1" />
+                    {formatDate(course.createdAt)}
+                  </div>
+                  <div className="flex justify-between items-center">
                     <button
-                      onClick={() => handleDeleteClick(course)}
-                      className="flex items-center text-[var(--accent-red)] hover:underline"
+                      onClick={() => navigate(`/admin-dashboard/courses/${course._id}`)}
+                      className="flex items-center text-[var(--primary-blue)] hover:underline"
                     >
-                      <Trash2 className="w-4 h-4 mr-1" />
-                      Delete
+                      <Eye className="w-4 h-4 mr-1" />
+                      View
                     </button>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleToggleStatus(course._id)}
+                        className={`px-3 py-1 rounded-md text-sm font-medium ${
+                          currentStatus === "Ready"
+                            ? "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                            : "bg-[var(--primary-blue)] text-white hover:bg-[var(--primary-blue)]/90"
+                        } transition-colors`}
+                      >
+                        {currentStatus === "Ready" ? "Unpublish" : "Publish"}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(course)}
+                        className="flex items-center text-[var(--accent-red)] hover:underline"
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="w-full text-center py-16 bg-gray-50 rounded-xl border border-dashed border-gray-300">

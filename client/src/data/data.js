@@ -1,0 +1,53 @@
+const courses = [
+	{
+	  _id: "67f409103d14a3f2d2a89f27",
+	  title: "Introduction to Graphic Design",
+	  description: "This course will delve into graphic design fundamentals, including tools, techniques, and creative process.",
+	  price: 1000,
+	  isFree: false,
+	  status: "Published",
+	  createdAt: "2025-04-07T17:19:12.557Z",
+	  thumbnail: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=800&auto=format&fit=crop&q=60",
+	},
+	{
+	  _id: "67f409103d14a3f2d2a89f28",
+	  title: "Web Development Fundamentals",
+	  description: "Learn HTML, CSS, and JavaScript basics to build your first website.",
+	  price: 0,
+	  isFree: true,
+	  status: "Published",
+	  createdAt: "2025-03-15T10:30:00.000Z",
+	  thumbnail: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&auto=format&fit=crop&q=60",
+	},
+	{
+	  _id: "67f409103d14a3f2d2a89f29",
+	  title: "Data Science for Beginners",
+	  description: "Introduction to data analysis, visualization, and basic machine learning concepts.",
+	  price: 1500,
+	  isFree: false,
+	  status: "Published",
+	  createdAt: "2025-02-20T08:45:00.000Z",
+	  thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=60",
+	},
+	{
+	  _id: "67f409103d14a3f2d2a89f30",
+	  title: "Mobile App Development with Flutter",
+	  description: "Build cross-platform mobile applications using Flutter framework.",
+	  price: 1200,
+	  isFree: false,
+	  status: "Published",
+	  createdAt: "2025-01-10T14:20:00.000Z",
+	  thumbnail: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop&q=60",
+	},
+	{
+	  _id: "67f409103d14a3f2d2a89f31",
+	  title: "Digital Marketing Essentials",
+	  description: "Learn SEO, social media marketing, email marketing, and content strategy.",
+	  price: 800,
+	  isFree: false,
+	  status: "Published",
+	  createdAt: "2024-12-05T09:15:00.000Z",
+	  thumbnail: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=800&auto=format&fit=crop&q=60",
+	}
+  ];
+  export default courses

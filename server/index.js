@@ -5,6 +5,7 @@ import connectDB from './config/db.js';
 import authRouter from './routes/auth.routes.js';
 import cookieParser from 'cookie-parser'
 import courseRouter from './routes/course.router.js';
+import mpesaRouter from './routes/mpesa.routes.js'
 import path from 'path'
 
 
@@ -24,6 +25,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/courses', courseRouter)
+app.use(mpesaRouter)
 
 
 app.get('/', (req, res) => {

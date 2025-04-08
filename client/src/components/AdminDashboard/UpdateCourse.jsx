@@ -1,24 +1,53 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X, Image as ImageIcon, Upload } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCourse, resetUpdateCourseState } from "../../features/course/updateCourseSlice.js";
+import {
+  updateCourse,
+  resetUpdateCourseState,
+} from "../../features/course/updateCourseSlice.js";
 import Feedback from "../Feedback";
-import { validateCourseForm, ErrorMessage } from '../../utils/validationUtils.jsx';
+import {
+  validateCourseForm,
+  ErrorMessage,
+} from "../../utils/validationUtils.jsx";
+import { fetchCourse } from "../../utils/fetchCourse.js";
+const apiUrl = import.meta.env.VITE_API_URL;
 
-const UpdateCourseModal = ({ courseToEdit }) => {
-  const { loading, success, error } = useSelector((state) => state.updateCourse);
+const UpdateCourseModal = () => {
+  const { loading, success, error } = useSelector(
+    (state) => state.updateCourse
+  );
+  const { courseId } = useParams();
   const dispatch = useDispatch();
   const [formErrors, setFormErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [courseToEdit, setCourseToEdit] = useState({});
+  useEffect(() => {
+    fetchCourse(apiUrl, courseId, setCourseToEdit);
+  }, [courseId]);
+  useEffect(() => {
+    if (courseToEdit._id) {
+      // Only update when courseToEdit is populated
+      setCourseData({
+        title: courseToEdit.title || "",
+        description: courseToEdit.description || "",
+        thumbnail: courseToEdit.thumbnail || "",
+        thumbnailFile: null,
+        price: courseToEdit.price?.toString() || "0",
+        isFree: courseToEdit.isFree || false,
+      });
+      setPreviewUrl(courseToEdit.thumbnail || "");
+    }
+  }, [courseToEdit]);
 
   const [courseData, setCourseData] = useState({
-    title: courseToEdit.title,
-    description: courseToEdit.description,
-    thumbnail: courseToEdit.thumbnail,
+    title: "",
+    description: "",
+    thumbnail: "",
     thumbnailFile: null,
-    price: courseToEdit.price.toString(),
-    isFree: courseToEdit.isFree,
+    price: "0",
+    isFree: false,
   });
 
   const [previewUrl, setPreviewUrl] = useState(courseToEdit.thumbnail);
@@ -74,7 +103,7 @@ const UpdateCourseModal = ({ courseToEdit }) => {
     });
     setFormErrors({});
     setTouched({});
-    navigate("/admin-dashboard");
+    navigate(`/admin-dashboard/courses/${courseId}`);
   };
 
   const handleInputChange = (e) => {
@@ -92,9 +121,9 @@ const UpdateCourseModal = ({ courseToEdit }) => {
     }
 
     if (formErrors[name]) {
-      setFormErrors(prev => ({ ...prev, [name]: null }));
+      setFormErrors((prev) => ({ ...prev, [name]: null }));
     }
-    setTouched(prev => ({ ...prev, [name]: true }));
+    setTouched((prev) => ({ ...prev, [name]: true }));
   };
 
   const handleFileChange = (e) => {
@@ -106,7 +135,7 @@ const UpdateCourseModal = ({ courseToEdit }) => {
         thumbnail: "",
       }));
       setPreviewUrl(URL.createObjectURL(file));
-      setFormErrors(prev => ({ ...prev, thumbnail: null }));
+      setFormErrors((prev) => ({ ...prev, thumbnail: null }));
     }
   };
 
@@ -118,7 +147,7 @@ const UpdateCourseModal = ({ courseToEdit }) => {
       thumbnailFile: null,
     }));
     setPreviewUrl(url);
-    setFormErrors(prev => ({ ...prev, thumbnail: null }));
+    setFormErrors((prev) => ({ ...prev, thumbnail: null }));
   };
 
   const handleRemoveThumbnail = () => {
@@ -138,7 +167,7 @@ const UpdateCourseModal = ({ courseToEdit }) => {
       title: true,
       description: true,
       thumbnail: true,
-      price: true
+      price: true,
     });
 
     if (Object.keys(errors).length === 0) {
@@ -184,9 +213,11 @@ const UpdateCourseModal = ({ courseToEdit }) => {
               Course Thumbnail
             </label>
             <div className="flex items-start gap-4 relative pb-2">
-              <div className={`w-32 h-32 border-2 border-dashed rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden ${
-                formErrors.thumbnail ? "border-red-500" : "border-gray-300"
-              }`}>
+              <div
+                className={`w-32 h-32 border-2 border-dashed rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden ${
+                  formErrors.thumbnail ? "border-red-500" : "border-gray-300"
+                }`}
+              >
                 {previewUrl ? (
                   <img
                     src={previewUrl}
@@ -230,7 +261,9 @@ const UpdateCourseModal = ({ courseToEdit }) => {
                     onChange={handleUrlChange}
                     placeholder="Enter image URL"
                     className={`w-full rounded-lg border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0069AA] ${
-                      formErrors.thumbnail ? "border-red-500" : "border-gray-300"
+                      formErrors.thumbnail
+                        ? "border-red-500"
+                        : "border-gray-300"
                     }`}
                     disabled={!!courseData.thumbnailFile}
                   />
