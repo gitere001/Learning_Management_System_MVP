@@ -46,7 +46,7 @@ export default function MobileNavigation({ onClose, logOutUser }) {
             role === "student" ? (
               <>
                 <Link
-                  to="/my-courses"
+                  to="/home/my-courses"
                   onClick={onClose}
                   className="px-3 py-2 text-[#333333] hover:text-[#0069AA] flex items-center"
                 >
@@ -71,7 +71,7 @@ export default function MobileNavigation({ onClose, logOutUser }) {
                 </Link>
                 <div className="border-t border-gray-100 mt-2 pt-2">
                   <button
-                    onClick={() => handleNavigation("/my-account")}
+                    onClick={() => handleNavigation("/home/profiles")}
                     className="w-full text-left px-3 py-2 text-[#333333] hover:text-[#0069AA] flex items-center"
                   >
                     <User className="w-4 h-4 mr-2" />

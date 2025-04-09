@@ -16,7 +16,7 @@ const initialState = {
 export const stkPush = createAsyncThunk('payment/stkPush', async (payload, thunkApi) => {
 	console.log(payload);
 	try {
-		const response = await axios.post(`${BASE_URL}/stk`, payload)
+		const response = await axios.post(`${BASE_URL}/stk`, payload, {withCredentials: true})
 		console.log(response.data);
 		return response.data
 
@@ -27,7 +27,7 @@ export const stkPush = createAsyncThunk('payment/stkPush', async (payload, thunk
 })
 export const stkQuery = createAsyncThunk('payment/stkQuery', async (payload, thunkApi) => {
 	try {
-		const response = await axios.post(`${BASE_URL}/stkquery`, payload)
+		const response = await axios.post(`${BASE_URL}/stkquery`, payload, {withCredentials: true})
 		console.log("payload: ", payload);
 		const data = response.data
 		console.log(data.data);

@@ -1,6 +1,7 @@
 // File: server/controllers/mpesaController.js
 import axios from 'axios';
 import { MPESA_BASE_URL } from '../config/mpesaConguration.js';
+import EnrolledCourse from '../models/enrolledCourse.model.js'
 
 import { generateTimestamp, generatePassword } from '../utils/mpesaHelpers.js';
 
@@ -53,7 +54,10 @@ export const stkPush = async (req, res) => {
 };
 
 export const stkQuery = async (req, res) => {
-  const { reqId } = req.body;
+  const { reqId, courseId } = req.body;
+  console.log("courseid", courseId);
+  const user = req.user
+  console.log(user);
 
   if (!reqId) {
     return res.status(400).json({ error: "Missing CheckoutRequestID" });
@@ -78,12 +82,38 @@ export const stkQuery = async (req, res) => {
       }
     );
 
-    return res.status(200).json({ message: "STK Query Successful", data: response.data });
+    console.log(response.data);
+
+    // Check if payment was successful
+    if (response.data.ResultCode === "0") {
+      console.log(response.data);
+      console.log("Payment successful, attempting enrollment...");
+      // Payment was successful - enroll the user in the course
+      const enrolledCourse = new EnrolledCourse({
+        userId: user._id,
+        courseId: courseId,
+        status: 'in-progress',
+        progress: 0
+      });
+
+      await enrolledCourse.save();
+
+      return res.status(200).json({
+        message: "STK Query Successful and course enrolled",
+        data: response.data,
+        enrolledCourse: enrolledCourse
+      });
+    } else {
+      // Payment was not successful
+      return res.status(200).json({
+        message: "STK Query Successful but payment failed",
+        data: response.data
+      });
+    }
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 };
-
 export const callback = async (req, res) => {
   res.status(200).json("success");
 };

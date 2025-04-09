@@ -6,10 +6,14 @@ import {
   resetPaymentStatus,
 } from "../../features/payment/paymentSlice";
 import { useState } from "react";
-import PreviewCheckout from "../studentDashboard/PreviewCheckout";
+import PreviewCheckout from "./PreviewCheckout";
+import { useNavigate } from "react-router-dom";
+
 
 function PaymentModal() {
-  const [mobile, setMobile] = useState("");
+  const [mpesaNumber, setMpesaNumber] = useState("");
+  const navigate = useNavigate()
+
   const { paymentStatus, error } = useSelector((state) => state.payment);
 
   const dispatch = useDispatch();
@@ -17,6 +21,8 @@ function PaymentModal() {
   function handleReturnHome() {
     dispatch(resetPaymentStatus());
     dispatch(closePaymentModal());
+    navigate("/home")
+
   }
 
   return (
@@ -25,7 +31,11 @@ function PaymentModal() {
         "bg-white pt-2  mt-[74px] rounded-2xl shadow-xl  w-full max-w-[300px] md:max-w-[500px]  mx-auto  transition-all duration-300 ease-in-out"
       }
     >
-      <PreviewCheckout />
+      <PreviewCheckout
+        mpesaNumber={mpesaNumber}
+        setMpesaNumber={setMpesaNumber}
+
+      />
 
       <div className="flex flex-col gap-2.5 items-center">
         <div
@@ -62,7 +72,7 @@ function PaymentModal() {
             Payment request sent!
           </h2>
           <p className="text-gray-600 text-center">
-            Please enter your M-Pesa PIN on phone {mobile}
+            Please enter your M-Pesa PIN on phone {mpesaNumber}
           </p>
         </div>
 
@@ -146,7 +156,7 @@ function PaymentModal() {
         <div
           className={`flex flex-col gap-2.5 items-center max-h-0 overflow-hidden opacity-0 invisible transition-all duration-400 ease-out ${
             paymentStatus === "payment-failed"
-              ? "max-h-[300px] opacity-100 visible"
+              ? "max-h-[300px] w-full pb-3 opacity-100 visible"
               : ""
           }`}
         >

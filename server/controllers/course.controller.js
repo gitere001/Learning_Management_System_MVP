@@ -163,6 +163,42 @@ export const toggleCourseStatus = async (req, res) => {
   }
 };
 
+export const checkEnrollment = async (req, res) => {
+  try {
+    // Get courseId from request params instead of body for GET request
+    const courseId = req.params.courseId;
+    const userId = req.user._id;
+
+    // Validate input
+    if (!courseId) {
+      return res.status(400).json({
+        success: false,
+        message: "Course ID is required"
+      });
+    }
+
+    // Check if the user is already enrolled in the course
+    const enrollment = await EnrolledCourse.findOne({
+      userId,
+      courseId
+    });
+
+    return res.status(200).json({
+      success: true,
+      isEnrolled: !!enrollment,
+      enrollment: enrollment || null
+    });
+
+  } catch (error) {
+    console.error("Enrollment check error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to check enrollment status",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
+
 // export const fetchStudentCourse = async (req, res) => {
 
 // }
@@ -220,6 +256,54 @@ export const enrollCourse = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: error.message || 'Server error'
+    });
+  }
+};
+
+export const fetchEnrolledCourses = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required"
+      });
+    }
+
+    // Find all enrollments for this user
+    const enrollments = await EnrolledCourse.find({ userId })
+      .select('status progress createdAt') // Only get these fields from enrollment
+      .populate({
+        path: 'courseId',
+        select: '_id title thumbnail' // Only get these fields from course
+      })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    // Format the response to exactly match requested structure
+    const enrolledCourses = enrollments.map(enrollment => ({
+      enrollmentId: enrollment._id,
+      courseId: enrollment.courseId._id,
+      title: enrollment.courseId.title,
+      thumbnail: enrollment.courseId.thumbnail,
+      enrolledOn: enrollment.createdAt,
+      status: enrollment.status,
+      progress: enrollment.progress
+    }));
+
+    return res.status(200).json({
+      success: true,
+      count: enrolledCourses.length,
+      data: enrolledCourses
+    });
+
+  } catch (error) {
+    console.error("Error fetching enrolled courses:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch enrolled courses",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

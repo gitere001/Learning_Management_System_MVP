@@ -1,22 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { stkPush, stkQuery } from "../../features/payment/paymentSlice";
-
-function PhoneInput2({ courseTotal }) {
-
-
-
-  const dispatch = useDispatch();
-  const [mpesaNumber, setMpesaNumber] = useState("");
-  const handleProceedToPay = (e) => {
-    e.preventDefault();
-    dispatch(stkPush({ phoneNumber: mpesaNumber, amount: courseTotal }));
-  };
+function PhoneInput2({
+  mpesaNumber,
+  setMpesaNumber,
+  handleBackClick,
+  handleProceedToPay,
+  isLoading = false
+}) {
 
 
   return (
     <>
-      <div className=" mb-2">
+      <div className="mb-2">
         <label
           htmlFor="mpesa-number"
           className="block text-sm font-medium text-gray-700 mb-2"
@@ -30,6 +23,7 @@ function PhoneInput2({ courseTotal }) {
           placeholder="07XXXXXXXX or 01XXXXXX"
           value={mpesaNumber}
           onChange={(e) => setMpesaNumber(e.target.value)}
+          disabled={isLoading}
         />
         <p className="mt-2 text-sm text-gray-500">
           You'll receive a payment request on this number
@@ -38,12 +32,19 @@ function PhoneInput2({ courseTotal }) {
 
       {/* Action buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
-        <button className="lms-button-accent flex-1 py-3">Cancel</button>
+        <button
+          onClick={handleBackClick}
+          className="lms-button-accent flex-1 py-3"
+          disabled={isLoading}
+        >
+          Cancel
+        </button>
         <button
           onClick={handleProceedToPay}
           className="lms-button-primary flex-1 py-3"
+          disabled={isLoading}
         >
-          Proceed to Pay
+          {isLoading ? "Checking..." : "Proceed to Pay"}
         </button>
       </div>
     </>

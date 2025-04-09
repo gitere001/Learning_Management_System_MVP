@@ -10,7 +10,7 @@ export default function StudentNavigation({logOutUser}) {
         <Home className="inline w-4 h-4 mr-1" />
         Home
       </Link>
-      <Link to="/my-courses" className="text-[#333333] hover:text-[#0069AA] transition-colors">
+      <Link to="/home/my-courses" className="text-[#333333] hover:text-[#0069AA] transition-colors">
         <BookOpenCheck className="inline w-4 h-4 mr-1" />
         My Courses
       </Link>
@@ -29,7 +29,7 @@ export default function StudentNavigation({logOutUser}) {
         </button>
         <div className="absolute right-0 mt-5 w-40 bg-white shadow-md rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button
-            onClick={() => navigate("/my-account")}
+            onClick={() => navigate("/home/profiles")}
             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
           >
             Account

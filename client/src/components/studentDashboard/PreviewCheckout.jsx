@@ -4,16 +4,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import mpesaIcon from "../../assets/mpesa-icon.png";
 import { fetchCourse } from "../../utils/fetchCourse";
 const apiUrl = import.meta.env.VITE_API_URL;
-import PhoneInput2 from "../PaymentModals/phoneInput2";
+import PhoneInput2 from "./phoneInput2";
 import { useDispatch, useSelector } from "react-redux";
-import { stkQuery } from "../../features/payment/paymentSlice";
+import {
+  closePaymentModal,
+  resetPaymentStatus,
+  stkPush,
+  stkQuery,
+} from "../../features/payment/paymentSlice";
+import Feedback from "../Feedback";
+import axios from "axios";
 
-const PreviewCheckout = () => {
+const PreviewCheckout = ({ mpesaNumber, setMpesaNumber }) => {
   const { paymentStatus, checkoutRequestID, stkQueryResultCode } = useSelector(
     (state) => state.payment
   );
 
-  console.log("checkoutRequestID: ", checkoutRequestID);
   const dispatch = useDispatch();
 
   const intervalRef = useRef(null);
@@ -21,16 +27,88 @@ const PreviewCheckout = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
 
+  const [feedback, setFeedback] = useState({
+    loading: false,
+    error: null,
+    success: null,
+  });
+  const successTimerRef = useRef(null);
+  const errorTimerRef = useRef(null);
+
   const [course, setCourse] = useState({});
+
   useEffect(() => {
     fetchCourse(apiUrl, courseId, setCourse);
   }, [courseId]);
 
   useEffect(() => {
+    if (successTimerRef.current) clearTimeout(successTimerRef.current);
+    if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+
+    if (feedback.success && !feedback.error) {
+      successTimerRef.current = setTimeout(() => {
+        setFeedback((prev) => ({ ...prev, success: null }));
+      }, 2000);
+    }
+
+    if (feedback.error) {
+      errorTimerRef.current = setTimeout(() => {
+        setFeedback((prev) => ({
+          ...prev,
+          error: null,
+          success: null,
+          loading: false,
+        }));
+      }, 2000);
+    }
+
+    return () => {
+      if (successTimerRef.current) clearTimeout(successTimerRef.current);
+      if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+    };
+  }, [feedback.success, feedback.error]);
+
+  async function checkEnrollment() {
+    try {
+      setFeedback((prev) => ({ ...prev, loading: true }));
+      const response = await axios.get(
+        `${apiUrl}/v1/courses/${course._id}/enrollment-status`,
+        { withCredentials: true }
+      );
+
+      // If already enrolled
+      if (response.data.isEnrolled) {
+        setFeedback((prev) => ({
+          ...prev,
+          loading: false,
+          success: "You're already enrolled in this course!",
+          error: null,
+        }));
+        successTimerRef.current = setTimeout(() => {
+          navigate(`/course/${course._id}`);
+        }, 2000);
+        return true;
+      }
+
+      setFeedback((prev) => ({ ...prev, loading: false }));
+      return false;
+    } catch (error) {
+      setFeedback((prev) => ({
+        ...prev,
+        loading: false,
+        error:
+          error.response?.data?.message || "Failed to check enrollment status",
+        success: null,
+      }));
+      return false;
+    }
+  }
+
+  useEffect(() => {
     if (checkoutRequestID) {
       const delay = setTimeout(() => {
         intervalRef.current = setInterval(() => {
-          dispatch(stkQuery({ reqId: checkoutRequestID }));
+          dispatch(stkQuery({ reqId: checkoutRequestID, courseId }));
         }, 2000);
 
         timeoutRef.current = setTimeout(() => {
@@ -53,7 +131,7 @@ const PreviewCheckout = () => {
         }
       };
     }
-  }, [checkoutRequestID, dispatch]);
+  }, [checkoutRequestID, dispatch, courseId]);
 
   useEffect(() => {
     if (stkQueryResultCode !== null) {
@@ -72,16 +150,32 @@ const PreviewCheckout = () => {
   }, [stkQueryResultCode]);
 
   const handleBackClick = () => {
-    navigate(-1); // Go back to previous page
+    dispatch(resetPaymentStatus());
+    dispatch(closePaymentModal());
+    navigate("/home");
   };
 
-  const handleCancel = () => {
-    navigate("/courses"); // Redirect to courses page
+  const handleProceedToPay = async (e) => {
+    e.preventDefault();
+
+    // Check if user is already enrolled before proceeding
+    const isEnrolled = await checkEnrollment();
+
+    if (!isEnrolled) {
+      dispatch(stkPush({ phoneNumber: mpesaNumber, amount: course.price }));
+    }
   };
 
   return (
-    <div className=" bg-[#F5F7FA]">
-      <div className="max-w-2xl mx-auto bg-white rounded-xl  overflow-hidden px-6">
+    <div className="bg-[#F5F7FA]">
+      {feedback.error && (
+        <Feedback isSuccess={false} message={feedback.error} />
+      )}
+      {feedback.success && (
+        <Feedback isSuccess={true} message={feedback.success} />
+      )}
+
+      <div className="max-w-2xl mx-auto bg-white rounded-xl overflow-hidden px-6">
         {/* Back button and header */}
         <div className="flex items-center mb-6">
           <button
@@ -116,7 +210,13 @@ const PreviewCheckout = () => {
             <span className="font-medium">MPESA</span>
           </div>
           {paymentStatus === "idle" && (
-            <PhoneInput2 courseTotal={course.price} />
+            <PhoneInput2
+              mpesaNumber={mpesaNumber}
+              setMpesaNumber={setMpesaNumber}
+              handleBackClick={handleBackClick}
+              handleProceedToPay={handleProceedToPay}
+              isLoading={feedback.loading}
+            />
           )}
         </div>
       </div>

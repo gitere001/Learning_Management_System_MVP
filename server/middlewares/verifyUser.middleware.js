@@ -8,6 +8,7 @@ import User from "../models/user.model.js";
  */
 export const verifyRefreshToken = async (req, res, next) => {
   const { refreshToken } = req.cookies;
+  console.log("this is the cookies", req.cookies);
 
   // Check if refresh token exists
   if (!refreshToken) {

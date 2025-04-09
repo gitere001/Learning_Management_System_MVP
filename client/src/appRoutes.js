@@ -10,7 +10,10 @@ const Login = lazy(() => import('./pages/LoginPage'))
 const Home = lazy(() => import('./pages/Home'))
 const HomeAdmin = lazy(() => import("./pages/HomeAdmin"))
 const Checkout = lazy(()=> import("./pages/Checkout"))
-const AddNewCourse = lazy(() => import("./components/AdminDashboard/AddCourseDialog"))
+const MyCourses = lazy(()=> import("./pages/studentEnrolledCourses"))
+const CourseLearingDetails = lazy(()=> import("./components/studentDashboard/CourseLearningDetails"))
+const ProfilesCard = lazy(()=> import("./pages/Profiles"))
+
 
 
 
@@ -23,6 +26,11 @@ export const appRoutes = [
 	{ path: "/contact-us", element: LandingPage },
 	{ path: "/home", element: Home, requireAuth:true  },
 	{ path: "/home/checkout/:courseId", element: Checkout, requireAuth:true},
+	{ path: "/home/my-courses", element: MyCourses, requireAuth: true},
+	{ path: "/home/my-courses/:courseId", element: CourseLearingDetails, requireAuth: true},
+	{ path: "/home/profiles", element: ProfilesCard, requireAuth: true},
+
+
 	{ path: "/admin-dashboard", element: HomeAdmin, requireAuth:true  },
 	{ path: "/admin-dashboard/add-new-course", element: HomeAdmin, requireAuth:true  },
 	{ path: "/admin-dashboard/courses/update-course/:courseId", element: HomeAdmin, requireAuth:true  },
