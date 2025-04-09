@@ -118,7 +118,9 @@ export const getCourse = async (req, res) => {
 
     if (user.role === "admin") {
 
-      const courses = await Course.find();
+      const courses = await Course.find()
+      .sort({ createdAt: -1 })
+      .lean();
       return res.status(200).json({ success: true, data: courses });
     } else if (user.role === "student") {
       const courses = await Course.find({ status: "Ready" });

@@ -7,6 +7,7 @@ import User from "../models/user.model.js";
  * verifies it, and attaches the corresponding user to the request object
  */
 export const verifyRefreshToken = async (req, res, next) => {
+  
   const { refreshToken } = req.cookies;
   console.log("this is the cookies", req.cookies);
 

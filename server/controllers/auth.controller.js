@@ -3,6 +3,9 @@ import bcrypt from "bcryptjs";
 import { generateTokens } from "../utils/jwt.js";
 import { verifyPassword } from "../utils/password.js";
 import jwt from "jsonwebtoken";
+import Course from '../models/course.model.js'
+import EnrolledCourse from '../models/enrolledCourse.model.js'
+
 
 export const registerUser = async (req, res) => {
 	try {
@@ -153,5 +156,57 @@ const logoutUser = (req, res) => {
 	res.clearCookie("refreshToken");
 	return res.status(200).json({ success: true, message: "Logout successful!" });
 };
+export const getStats = async (req, res) => {
+	try {
+	  const { role, _id: userId } = req.user;
+
+	  if (role === 'admin') {
+		// Admin statistics
+		const [totalCourses, totalStudents, subscribedCourses] = await Promise.all([
+		  Course.countDocuments(),
+		  User.countDocuments({ role: 'student' }),
+		  EnrolledCourse.countDocuments()
+		]);
+
+		return res.status(200).json({
+		  success: true,
+		  stats: {
+			totalCourses,
+			totalStudents,
+			subscribedCourses
+		  }
+		});
+	  } else if (role === 'student') {
+		// Student statistics
+		const [enrolled, completed, pending] = await Promise.all([
+		  EnrolledCourse.countDocuments({ userId }),
+		  EnrolledCourse.countDocuments({ userId, status: 'completed' }),
+		  EnrolledCourse.countDocuments({ userId, status: 'in-progress' })
+		]);
+
+		return res.status(200).json({
+		  success: true,
+		  stats: {
+			enrolledCourses: enrolled,
+			completedCourses: completed,
+			pendingCompletion: pending
+		  }
+		});
+	  }
+
+	  return res.status(403).json({
+		success: false,
+		message: 'Unauthorized access'
+	  });
+
+	} catch (error) {
+	  console.error('Error fetching statistics:', error);
+	  return res.status(500).json({
+		success: false,
+		message: 'Failed to fetch statistics',
+		error: process.env.NODE_ENV === 'development' ? error.message : undefined
+	  });
+	}
+  };
 
 export { loginUser, refreshToken, logoutUser };

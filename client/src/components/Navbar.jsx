@@ -33,8 +33,7 @@ function Navbar() {
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  console.log("role", role);
-  console.log("isAuthenticated", isAuthenticated);
+  
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">

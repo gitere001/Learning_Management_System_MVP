@@ -1,13 +1,15 @@
 import React from "react";
 import { GraduationCap, UserCog } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+const { role } = useSelector((state) => state.authenication);
 
 const RoleSelection = ({ onSelectRole, loginRef }) => {
   return (
     <div ref={loginRef} className="text-center space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-[#0069AA]">
-		Login to Digital 4 Africa LMS
+          Login to Digital Africa LMS
         </h1>
         <p className="mt-2 text-gray-600">
           Please select your role to continue
@@ -39,10 +41,13 @@ const RoleSelection = ({ onSelectRole, loginRef }) => {
           <p className="mt-2 text-sm text-gray-500">Manage the platform</p>
         </button>
       </div>
-	  <div className="mt-6 text-center">
+      <div className="mt-6 text-center">
         <p className="text-sm text-gray-600">
           Don't have an account?{" "}
-          <Link to={'/signup'} className="font-medium text-[#0069AA] hover:text-[#005589]">
+          <Link
+            to={"/signup"}
+            className="font-medium text-[#0069AA] hover:text-[#005589]"
+          >
             Sign up
           </Link>
         </p>
