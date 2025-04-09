@@ -55,7 +55,7 @@ A full-fledged Learning Management System (LMS) built with **React**, **Node.js*
 #### 3. Course Creation
 ![Course Creation](client/src/assets/courseCreation.png)
 
-#### 4. Certificate Generation
+#### 4. Accessing Course Details
 ![Course Learning](client/src/assets/lesson.png)
 
 ---
