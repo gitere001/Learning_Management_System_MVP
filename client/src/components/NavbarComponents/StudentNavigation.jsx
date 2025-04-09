@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { BookOpenCheck, BarChart3, Bell, User, LogOut, Home } from "lucide-react";
+import { BookOpenCheck, BarChart3, Bell, User, LogOut, Home, Award } from "lucide-react";
 
 export default function StudentNavigation({logOutUser}) {
   const navigate = useNavigate();
@@ -14,9 +14,9 @@ export default function StudentNavigation({logOutUser}) {
         <BookOpenCheck className="inline w-4 h-4 mr-1" />
         My Courses
       </Link>
-      <Link to="/reports" className="text-[#333333] hover:text-[#0069AA] transition-colors">
-        <BarChart3 className="inline w-4 h-4 mr-1" />
-        Reports
+      <Link to="/home/certificates" className="text-[#333333] hover:text-[#0069AA] transition-colors">
+        <Award className="inline w-4 h-4 mr-1" />
+        Certificates
       </Link>
       <Link to="/notifications" className="text-[#333333] hover:text-[#0069AA] transition-colors">
         <Bell className="inline w-4 h-4 mr-1" />

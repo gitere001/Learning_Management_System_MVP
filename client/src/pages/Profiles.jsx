@@ -1,9 +1,22 @@
-import { useSelector } from 'react-redux';
-import { Edit } from 'lucide-react';
+import { useSelector } from "react-redux";
+import { Edit } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const UserProfileCard = () => {
   const { user } = useSelector((state) => state.authenication);
-  const fullName = `${user.firstName} ${user.middleName ? user.middleName + ' ' : ''}${user.lastName}`;
+  const fullName = `${user.firstName} ${
+    user.middleName ? user.middleName + " " : ""
+  }${user.lastName}`;
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname === "/home/profiles") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [location.pathname]);
 
   return (
     <div className="mt-[140px] mx-auto w-[94%] md:w-[100%] max-w-4xl min-h-screen ">
@@ -12,7 +25,8 @@ const UserProfileCard = () => {
           <div className="flex flex-col items-center">
             {/* Avatar */}
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#0069AA] to-[#00A1E0] flex items-center justify-center text-white text-3xl font-bold">
-              {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+              {user.firstName.charAt(0)}
+              {user.lastName.charAt(0)}
             </div>
 
             {/* User Info */}

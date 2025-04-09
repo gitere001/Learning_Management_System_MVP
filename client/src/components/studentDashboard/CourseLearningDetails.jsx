@@ -1,15 +1,26 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, CheckCircle, Circle, Menu, X } from "lucide-react";
 import lessons from "../../data/lessons";
 
 const CourseLearning = () => {
+  const location = useLocation();
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [currentLesson, setCurrentLesson] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLessonCompleted, setIsLessonCompleted] = useState(false);
+
+  useEffect(() => {
+      if (location.pathname === `/home/my-courses/${courseId}`) {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+
+      }
+    }, [location.pathname]);
 
   // Set the first lesson as default when component mounts
   useEffect(() => {

@@ -1,10 +1,10 @@
 import React from "react";
 import { GraduationCap, UserCog } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-const { role } = useSelector((state) => state.authenication);
+
 
 const RoleSelection = ({ onSelectRole, loginRef }) => {
+
   return (
     <div ref={loginRef} className="text-center space-y-6">
       <div>

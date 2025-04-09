@@ -1,5 +1,5 @@
 import { ArrowLeft, BookOpen, CheckCircle, Clock, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import buildImageUrl from "../utils/buildurl";
@@ -7,13 +7,22 @@ import { formatDate } from "../utils/formatDate";
 const apiUrl = import.meta.env.VITE_API_URL;
 
 const EnrolledCourses = () => {
+  const location = useLocation()
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [enrolledCourses, setEnrolledCourses] = useState([])
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (location.pathname === '/home/my-courses') {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
 
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
 	const fetchEnrolledCourses = async () => {

@@ -159,7 +159,7 @@ const LoginForm = ({ role, onBack }) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
+        { role !== "admin" &&  <div className="flex items-center">
             <input
               id="remember-me"
               type="checkbox"
@@ -171,16 +171,16 @@ const LoginForm = ({ role, onBack }) => {
             >
               Remember me
             </label>
-          </div>
+          </div>}
 
-          <div className="text-sm">
+         { role !== "admin" && <div className="text-sm">
             <Link
               to={"/password-reset"}
               className="font-medium text-[#0069AA] hover:text-[#005589]"
             >
               Forgot password?
             </Link>
-          </div>
+          </div>}
         </div>
 
         <div className="flex gap-3">

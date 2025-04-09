@@ -6,6 +6,7 @@ import {
   Bell,
   User,
   LogOut,
+  Award,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 
@@ -54,12 +55,12 @@ export default function MobileNavigation({ onClose, logOutUser }) {
                   My Courses
                 </Link>
                 <Link
-                  to="/reports"
+                  to="/home/certificates"
                   onClick={onClose}
                   className="px-3 py-2 text-[#333333] hover:text-[#0069AA] flex items-center"
                 >
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Reports
+                  <Award className="w-4 h-4 mr-2" />
+                  Certificates
                 </Link>
                 <Link
                   to="/notifications"
